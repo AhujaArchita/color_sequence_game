@@ -12,6 +12,15 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="dashboard-body-mode">
+  <!-- Global loading overlay system -->
+  <div class="neural-loader" id="neuralLoader">
+    <div class="loader-terminal">
+      <div class="loader-scanner"></div>
+      <div class="loader-text">ESTABLISHING NEURAL LINK...</div>
+      <div class="loader-pct" id="loaderPct">0%</div>
+    </div>
+  </div>
+
   <!-- Ambient background elements -->
   <div class="grid-overlay"></div>
   <div class="scanlines"></div>
@@ -37,6 +46,7 @@
           <a href="leaderboard.html" class="nav-tab">LEADERBOARD</a>
           <a href="dashboard.html" class="nav-tab active">DASHBOARD</a>
           <a href="profile.html" class="nav-tab">PROFILE</a>
+          <a href="settings.html" class="nav-tab">SETTINGS</a>
         </nav>
 
         <a href="index.html" class="btn-logout" id="logOutBtn">
@@ -89,7 +99,7 @@
           <!-- XP Level Battery Progress -->
           <div class="hud-card xp-card">
             <div class="xp-header">
-              <span class="xp-level-badge">LVL 84</span>
+              <span class="xp-level-badge" id="xpLevelBadge">LVL 84</span>
               <span class="xp-stats-value" id="xpText">8,450 / 10,000 XP</span>
             </div>
             
@@ -150,7 +160,7 @@
               </div>
               <div class="stat-info">
                 <span class="stat-label">TOTAL SCORE</span>
-                <span class="stat-number text-glow-cyan">1,248,400</span>
+                <span class="stat-number text-glow-cyan" id="statTotalScore">1,248,400</span>
                 <span class="stat-subtext">TOP 0.5% GLOBAL</span>
               </div>
             </div>
@@ -161,7 +171,7 @@
               </div>
               <div class="stat-info">
                 <span class="stat-label">HIGHEST LEVEL</span>
-                <span class="stat-number text-glow-green">84</span>
+                <span class="stat-number text-glow-green" id="statHighestLevel">84</span>
                 <span class="stat-subtext">ELITE CALIBRATION</span>
               </div>
             </div>
@@ -172,7 +182,7 @@
               </div>
               <div class="stat-info">
                 <span class="stat-label">AVG ACCURACY</span>
-                <span class="stat-number text-glow-yellow">98.4%</span>
+                <span class="stat-number text-glow-yellow" id="statAvgAccuracy">98.4%</span>
                 <span class="stat-subtext">STABLE REPLICATOR</span>
               </div>
             </div>
@@ -183,7 +193,7 @@
               </div>
               <div class="stat-info">
                 <span class="stat-label">GAMES PLAYED</span>
-                <span class="stat-number text-glow-purple">342</span>
+                <span class="stat-number text-glow-purple" id="statGamesPlayed">342</span>
                 <span class="stat-subtext">NEURAL LINK SYNCED</span>
               </div>
             </div>

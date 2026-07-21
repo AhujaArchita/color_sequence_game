@@ -12,6 +12,15 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="dashboard-body-mode">
+  <!-- Global loading overlay system -->
+  <div class="neural-loader" id="neuralLoader">
+    <div class="loader-terminal">
+      <div class="loader-scanner"></div>
+      <div class="loader-text">ESTABLISHING NEURAL LINK...</div>
+      <div class="loader-pct" id="loaderPct">0%</div>
+    </div>
+  </div>
+
   <!-- Ambient background elements -->
   <div class="grid-overlay"></div>
   <div class="scanlines"></div>
@@ -37,6 +46,7 @@
           <a href="leaderboard.html" class="nav-tab active">LEADERBOARD</a>
           <a href="dashboard.html" class="nav-tab">DASHBOARD</a>
           <a href="profile.html" class="nav-tab">PROFILE</a>
+          <a href="settings.html" class="nav-tab">SETTINGS</a>
         </nav>
 
         <a href="index.html" class="btn-logout" id="logOutBtn">

@@ -12,6 +12,15 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="game-body-mode">
+  <!-- Global loading overlay system -->
+  <div class="neural-loader" id="neuralLoader">
+    <div class="loader-terminal">
+      <div class="loader-scanner"></div>
+      <div class="loader-text">ESTABLISHING NEURAL LINK...</div>
+      <div class="loader-pct" id="loaderPct">0%</div>
+    </div>
+  </div>
+
   <!-- Ambient background elements -->
   <div class="grid-overlay"></div>
   <div class="scanlines"></div>
@@ -36,6 +45,7 @@
           <a href="leaderboard.html" class="nav-tab">LEADERBOARD</a>
           <a href="dashboard.html" class="nav-tab">DASHBOARD</a>
           <a href="profile.html" class="nav-tab">PROFILE</a>
+          <a href="settings.html" class="nav-tab">SETTINGS</a>
         </nav>
 
         <a href="index.html" class="btn-logout" id="logOutBtn">
@@ -58,15 +68,57 @@
           <div class="stat-hud-title">BEST_PROTOCOL</div>
           <div class="stat-hud-value text-glow-yellow" id="bestVal">000</div>
         </div>
+        <!-- Lives indicator stats slot -->
+        <div class="stat-hud-box" id="livesHudBox" style="display: none;">
+          <div class="stat-hud-title">LIVES_LEFT</div>
+          <div class="stat-hud-value lives-indicator-box" id="livesVal">
+            <!-- Injected dynamically in JS -->
+          </div>
+        </div>
       </section>
 
-      <!-- Mode Selector Panel -->
-      <div class="mode-selector-panel">
-        <span class="mode-label">ARENA_MODE:</span>
-        <div class="mode-toggle-group">
-          <button class="mode-btn active" id="modeNormalBtn">NORMAL_4P</button>
-          <button class="mode-btn" id="modeAdvancedBtn">ADVANCED_8P</button>
+      <!-- Selection controls for Mode & Difficulty -->
+      <div class="controls-selection-row">
+        
+        <!-- Arena Layout -->
+        <div class="selection-group">
+          <span class="selection-label">ARENA:</span>
+          <div class="mode-toggle-group">
+            <button class="mode-btn active" id="modeNormalBtn">4_PADS</button>
+            <button class="mode-btn" id="modeAdvancedBtn">8_PADS</button>
+          </div>
         </div>
+
+        <!-- Rules Mode Selector -->
+        <div class="selection-group">
+          <span class="selection-label">RULES_MODE:</span>
+          <div class="custom-select-wrapper">
+            <select id="rulesModeSelect" class="custom-select-hud">
+              <option value="classic">CLASSIC_MEM</option>
+              <option value="timer">TIMER_RUSH</option>
+              <option value="survival">SURVIVAL_3L</option>
+              <option value="daily">DAILY_CHALLENGE</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Difficulty Speed Selector -->
+        <div class="selection-group">
+          <span class="selection-label">SPEED:</span>
+          <div class="custom-select-wrapper">
+            <select id="difficultySelect" class="custom-select-hud">
+              <option value="easy">EASY</option>
+              <option value="medium" selected>MEDIUM</option>
+              <option value="hard">HARD</option>
+            </select>
+          </div>
+        </div>
+        
+      </div>
+
+      <!-- Timer countdown progress bar -->
+      <div id="gameTimerBarContainer">
+        <div id="gameTimerBar"></div>
       </div>
 
       <!-- Main Game Arena -->

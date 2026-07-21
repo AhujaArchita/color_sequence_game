@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neon Sequence | System Configurations</title>
+  <meta name="description" content="Configure core audio loops, toggle graphic color theme schemes, and verify credentials.">
+  <!-- Fonts: Orbitron for titles, Rajdhani for technical headers, Inter for readable copy -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Orbitron:wght@600;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="dashboard-body-mode">
+  <!-- Global loading overlay system -->
+  <div class="neural-loader" id="neuralLoader">
+    <div class="loader-terminal">
+      <div class="loader-scanner"></div>
+      <div class="loader-text">ESTABLISHING NEURAL LINK...</div>
+      <div class="loader-pct" id="loaderPct">0%</div>
+    </div>
+  </div>
+
+  <!-- Ambient background elements -->
+  <div class="grid-overlay"></div>
+  <div class="scanlines"></div>
+  <div class="neon-ambient-glows">
+    <div class="glow-cyan"></div>
+    <div class="glow-green"></div>
+  </div>
+
+  <div class="app-container">
+    <div class="leaderboard-wrapper">
+      
+      <!-- Top HUD Header -->
+      <header class="game-header">
+        <div class="game-logo">
+          <span class="logo-accent-bracket">&lt;</span>
+          <span class="logo-title">NEON SEQUENCE</span>
+          <span class="logo-accent-bracket">&gt;</span>
+        </div>
+        
+        <!-- Navigation Tabs -->
+        <nav class="dash-nav">
+          <a href="game.html" class="nav-tab">PLAY</a>
+          <a href="leaderboard.html" class="nav-tab">LEADERBOARD</a>
+          <a href="dashboard.html" class="nav-tab">DASHBOARD</a>
+          <a href="profile.html" class="nav-tab">PROFILE</a>
+          <a href="settings.html" class="nav-tab active">SETTINGS</a>
+        </nav>
+
+        <a href="index.html" class="btn-logout" id="logOutBtn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          LOG_OUT
+        </a>
+      </header>
+
+      <!-- Settings Layout -->
+      <div class="leaderboard-layout">
+        
+        <section class="hud-card rankings-table-card">
+          <div class="card-header">
+            <div class="terminal-title">SYSTEM_CORE_SETTINGS</div>
+            <div class="stats-count" id="settingsXpVal">LOAD: -- XP</div>
+          </div>
+          
+          <div class="settings-content-wrapper">
+            
+            <!-- SECTION 1: AUDIO CONFIGURATIONS -->
+            <div class="settings-section">
+              <h3 class="settings-heading">AUDIO_TRANSMISSION_PROTOCOL</h3>
+              
+              <div class="settings-row">
+                <div class="settings-info">
+                  <span class="settings-title">BACKGROUND_AMBIENT_MUSIC</span>
+                  <span class="settings-desc">Toggle low-frequency background neural synth drone.</span>
+                </div>
+                <div class="settings-control">
+                  <label class="switch">
+                    <input type="checkbox" id="bgmToggle">
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="settings-row">
+                <div class="settings-info">
+                  <span class="settings-title">AUDIO_EFFECTS_FEEDBACK</span>
+                  <span class="settings-desc">Activate click and response chime synthesizers.</span>
+                </div>
+                <div class="settings-control">
+                  <label class="switch">
+                    <input type="checkbox" id="sfxToggle" checked>
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- SECTION 2: GRAPHICAL THEMES OVERRIDES -->
+            <div class="settings-section">
+              <h3 class="settings-heading">NEURAL_INTERFACE_THEME</h3>
+              <p class="settings-desc" style="margin-top: -5px; margin-bottom: 10px;">Select custom graphic skins. Higher level skins unlock with XP achievements.</p>
+              
+              <div class="theme-cards-grid">
+                
+                <!-- Theme 1: Default Cyan-Green -->
+                <div class="theme-unlock-card" id="theme-default" data-theme="default">
+                  <div class="theme-swatch">
+                    <div class="swatch-dot" style="background-color: #00f0ff;"></div>
+                    <div class="swatch-dot" style="background-color: #39ff14;"></div>
+                  </div>
+                  <span class="theme-name">NEON_CORE</span>
+                  <span class="theme-status">ACTIVE</span>
+                </div>
+
+                <!-- Theme 2: Retro Amber & Gold (Level 5 / 2,000 XP) -->
+                <div class="theme-unlock-card locked" id="theme-amber-gold" data-theme="amber-gold" data-xp-req="2000">
+                  <div class="theme-swatch">
+                    <div class="swatch-dot" style="background-color: #ffaa00;"></div>
+                    <div class="swatch-dot" style="background-color: #ffd700;"></div>
+                  </div>
+                  <span class="theme-name">AMBER_RETRO</span>
+                  <span class="theme-status">REQ: 2,000 XP</span>
+                </div>
+
+                <!-- Theme 3: Synthwave Pink & Purple (Level 10 / 5,000 XP) -->
+                <div class="theme-unlock-card locked" id="theme-synthwave" data-theme="synthwave" data-xp-req="5000">
+                  <div class="theme-swatch">
+                    <div class="swatch-dot" style="background-color: #ff007f;"></div>
+                    <div class="swatch-dot" style="background-color: #9d00ff;"></div>
+                  </div>
+                  <span class="theme-name">SYNTH_WAVE</span>
+                  <span class="theme-status">REQ: 5,000 XP</span>
+                </div>
+
+                <!-- Theme 4: Toxik Acid Green & Poison Red (Level 20 / 10,000 XP) -->
+                <div class="theme-unlock-card locked" id="theme-toxic" data-theme="toxic" data-xp-req="10000">
+                  <div class="theme-swatch">
+                    <div class="swatch-dot" style="background-color: #39ff14;"></div>
+                    <div class="swatch-dot" style="background-color: #ff073a;"></div>
+                  </div>
+                  <span class="theme-name">TOXIK_CORE</span>
+                  <span class="theme-status">REQ: 10,000 XP</span>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- SECTION 3: SYSTEM INTEGRITY (RESET) -->
+            <div class="settings-section" style="margin-top: 15px;">
+              <h3 class="settings-heading" style="color: var(--neon-red); border-color: rgba(255, 0, 85, 0.1);">SYSTEM_INTEGRITY_SECTOR</h3>
+              
+              <div class="settings-row" style="border: none;">
+                <div class="settings-info">
+                  <span class="settings-title" style="color: var(--neon-red);">TERMINATE_LOCAL_PROFILE</span>
+                  <span class="settings-desc">Deletes all local scores, XP metrics, bios records, and theme unlocks. This action is irreversible.</span>
+                </div>
+                <button class="btn-danger" id="resetBtn">PURGE_DATA</button>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="settings.js"></script>
+</body>
+</html>

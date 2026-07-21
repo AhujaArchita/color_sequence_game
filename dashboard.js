@@ -1,8 +1,20 @@
 document.addEventListener('DOMContentLoaded', () => {
+  // Apply theme override instantly on load
+  const currentTheme = localStorage.getItem('neon_settings_theme') || 'default';
+  if (currentTheme !== 'default') {
+    document.body.classList.add(`theme-${currentTheme}`);
+  }
+
   // Elements
   const profileUsername = document.getElementById('profileUsername');
   const xpFillBar = document.getElementById('xpFillBar');
   const xpText = document.getElementById('xpText');
+  const xpLevelBadge = document.getElementById('xpLevelBadge');
+
+  const statTotalScore = document.getElementById('statTotalScore');
+  const statHighestLevel = document.getElementById('statHighestLevel');
+  const statAvgAccuracy = document.getElementById('statAvgAccuracy');
+  const statGamesPlayed = document.getElementById('statGamesPlayed');
   
   const chartNodes = document.querySelectorAll('.chart-node');
   const chartTooltip = document.getElementById('chartTooltip');
@@ -15,58 +27,76 @@ document.addEventListener('DOMContentLoaded', () => {
     profileUsername.textContent = `PILOT_${callsign}`;
   }
 
-  // Sync high level score if user played in this browser
-  const bestScore = localStorage.getItem('neon_best_score');
-  if (bestScore) {
-    // If they have a high score, calculate a mock level based on it
-    // E.g., if best score is 30, level is 4 (10 score per level)
-    const mockLevel = Math.max(1, Math.floor(parseInt(bestScore) / 10) + 1);
-    
-    // We can display this high score or level in the stats
-    const statsNumbers = document.querySelectorAll('.stat-number');
-    if (statsNumbers && statsNumbers.length >= 2) {
-      // statsNumbers[0] is Total Score, statsNumbers[1] is Highest Level
-      // Let's set Highest Level to mockLevel if it's greater than default
-      const currentHighestLevel = parseInt(statsNumbers[1].textContent);
-      if (mockLevel > currentHighestLevel) {
-        statsNumbers[1].textContent = String(mockLevel).padStart(2, '0');
-      }
-    }
-  }
+  // 2. XP level calculations & animations
+  const totalXp = parseInt(localStorage.getItem('neon_total_xp')) || 0;
+  const calculatedLevel = Math.floor(totalXp / 500) + 1;
+  const currentXpValue = totalXp % 500;
+  const progressPercentage = (currentXpValue / 500) * 100;
 
-  // 2. Animate XP Battery Progress Bar on page load
-  // Start from 0 width and animate to 84.5%
+  xpLevelBadge.textContent = `LVL ${calculatedLevel}`;
+  xpText.textContent = `${currentXpValue.toLocaleString()} / 500 XP`;
+
+  // Start from 0 width and animate to progress percentage
   setTimeout(() => {
-    xpFillBar.style.width = '84.5%';
+    xpFillBar.style.width = `${progressPercentage}%`;
   }, 100);
 
-  // 3. Interactive SVG Chart Node Tooltips
+  // 3. Sync Dynamic Statistics
+  // Read all best score combinations
+  const modes = ['classic', 'timer', 'survival', 'daily'];
+  const arenas = ['normal', 'advanced'];
+  
+  let summedScores = 0;
+  let highestLevelAcrossModes = 1;
+  
+  modes.forEach(mode => {
+    arenas.forEach(arena => {
+      const scoreKey = `neon_best_score_${mode}_${arena}`;
+      const best = parseInt(localStorage.getItem(scoreKey)) || 0;
+      summedScores += best;
+      
+      // Calculate level achieved based on score (10 score per level)
+      const calculatedLvl = Math.max(1, Math.floor(best / 10) + 1);
+      if (calculatedLvl > highestLevelAcrossModes) {
+        highestLevelAcrossModes = calculatedLvl;
+      }
+    });
+  });
+
+  // Default mock values if first time loading dashboard
+  const finalTotalScore = summedScores > 0 ? summedScores : 45200;
+  const finalHighestLevel = summedScores > 0 ? highestLevelAcrossModes : 42;
+  const finalGamesPlayed = parseInt(localStorage.getItem('neon_games_played')) || 28;
+
+  statTotalScore.textContent = finalTotalScore.toLocaleString();
+  statHighestLevel.textContent = String(finalHighestLevel).padStart(2, '0');
+  statGamesPlayed.textContent = String(finalGamesPlayed).padStart(2, '0');
+  
+  // Set mock Avg Accuracy based on games played to keep theme tech
+  const accuracyBase = 92.5 + (calculatedLevel * 0.15);
+  const finalAccuracy = Math.min(99.8, accuracyBase).toFixed(1);
+  statAvgAccuracy.textContent = `${finalAccuracy}%`;
+
+  // 4. Interactive SVG Chart Node Tooltips
   chartNodes.forEach((node, index) => {
-    // Set node scale-up transition delay
     node.style.transition = 'all 0.2s ease';
     node.style.transformOrigin = 'center';
     node.style.transform = 'scale(0)';
     
-    // Animate scale in sequentially
     setTimeout(() => {
       node.style.transform = 'scale(1)';
     }, 1200 + index * 150);
 
-    // Hover tooltip interactions
     node.addEventListener('mouseenter', (e) => {
       const val = node.getAttribute('data-val');
-      
-      // Get SVG bounding box coordinates to align tooltip
       const svg = node.ownerSVGElement;
       const point = svg.createSVGPoint();
       point.x = parseFloat(node.getAttribute('cx'));
       point.y = parseFloat(node.getAttribute('cy'));
       
-      // Transform SVG coordinates to screen coordinates
       const matrix = node.getScreenCTM();
       const screenPoint = point.matrixTransform(matrix);
       
-      // Transform screen coordinates back to viewport relative offset
       const viewportRect = svg.getBoundingClientRect();
       const tooltipX = screenPoint.x - window.scrollX - viewportRect.left + 5;
       const tooltipY = screenPoint.y - window.scrollY - viewportRect.top - 10;
@@ -82,8 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 4. Interactive Telemetry Latency Log ticker
-  // Update latency periodically to make it feel alive
+  // 5. Connection latency ticking HUD
   const connectionText = document.querySelector('.hud-connection-text');
   if (connectionText) {
     setInterval(() => {
@@ -95,5 +124,23 @@ document.addEventListener('DOMContentLoaded', () => {
         connectionText.textContent = 'CORE_SIM_SYNCING...';
       }
     }, 4000);
+  }
+
+  // Global Neural Loader count-up animation
+  const loader = document.getElementById('neuralLoader');
+  const loaderPct = document.getElementById('loaderPct');
+  if (loader && loaderPct) {
+    let pct = 0;
+    const interval = setInterval(() => {
+      pct += Math.floor(Math.random() * 20) + 10;
+      if (pct >= 100) {
+        pct = 100;
+        clearInterval(interval);
+        setTimeout(() => {
+          loader.classList.add('loaded');
+        }, 150);
+      }
+      loaderPct.textContent = pct + '%';
+    }, 60);
   }
 });

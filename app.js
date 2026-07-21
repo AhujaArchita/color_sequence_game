@@ -1,4 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
+  // Apply theme override instantly on load
+  const currentTheme = localStorage.getItem('neon_settings_theme') || 'default';
+  if (currentTheme !== 'default') {
+    document.body.classList.add(`theme-${currentTheme}`);
+  }
+
   // Elements
   const loginForm = document.getElementById('loginForm');
   const emailInput = document.getElementById('emailInput');
@@ -142,24 +148,23 @@ document.addEventListener('DOMContentLoaded', () => {
       if (stepIndex < steps.length) {
         signInBtnText.textContent = steps[stepIndex];
       }
-    }, 600);
+    }, 500);
 
-    setTimeout(() => {
+    // Call login API
+    fetch('backend/api/auth/login.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password
+      })
+    })
+    .then(response => response.json().then(data => ({ status: response.status, data })))
+    .then(({ status, data }) => {
       clearInterval(interval);
-      
-      // MOCK AUTHENTICATION CHECK
-      // If email is 'error@neonsequence.net' or password is 'wrongpassword', simulate failure
-      if (email === 'error@neonsequence.net' || password === '12345678') {
-        signInBtn.disabled = false;
-        signInBtnText.textContent = 'DECRYPT & SIGN IN';
-        
-        globalErrorMessage.textContent = 'ACCESS_DENIED: NEURAL_SIGNATURE_MISMATCH_OR_KEY_EXPIRED';
-        globalErrorBox.classList.remove('hidden');
-        
-        // Shake animation
-        loginCard.style.animation = 'shake-error 0.4s ease';
-        setTimeout(() => { loginCard.style.animation = ''; }, 400);
-      } else {
+      if (status === 200 && data.success) {
         // SUCCESS state
         // Save email if Remember Me checked
         if (rememberCheckbox.checked) {
@@ -185,13 +190,35 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 100);
 
         // Customize username in the success overlay
-        const pilotName = email.split('@')[0].toUpperCase();
+        const pilotName = data.data.username.toUpperCase();
         successUsername.textContent = `>>> DECRYPTING PROFILE: PILOT_${pilotName}_FOUND`;
         
         // Show success overlay
         successOverlay.classList.remove('hidden');
+      } else {
+        // Show error from API
+        signInBtn.disabled = false;
+        signInBtnText.textContent = 'DECRYPT & SIGN IN';
+        
+        globalErrorMessage.textContent = data.message || 'ACCESS_DENIED: NEURAL_SIGNATURE_MISMATCH_OR_KEY_EXPIRED';
+        globalErrorBox.classList.remove('hidden');
+        
+        // Shake animation
+        loginCard.style.animation = 'shake-error 0.4s ease';
+        setTimeout(() => { loginCard.style.animation = ''; }, 400);
       }
-    }, 2500);
+    })
+    .catch(error => {
+      clearInterval(interval);
+      signInBtn.disabled = false;
+      signInBtnText.textContent = 'DECRYPT & SIGN IN';
+      
+      globalErrorMessage.textContent = 'SYS_ERR: COMMUNICATIONS_OFFLINE';
+      globalErrorBox.classList.remove('hidden');
+      
+      loginCard.style.animation = 'shake-error 0.4s ease';
+      setTimeout(() => { loginCard.style.animation = ''; }, 400);
+    });
   });
 
   // 4. Continue to Game Simulation Click
@@ -245,4 +272,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.addEventListener('mousemove', handleMouseMove);
   loginCard.addEventListener('mouseleave', handleMouseLeave);
+
+  // Global Neural Loader count-up animation
+  const loader = document.getElementById('neuralLoader');
+  const loaderPct = document.getElementById('loaderPct');
+  if (loader && loaderPct) {
+    let pct = 0;
+    const interval = setInterval(() => {
+      pct += Math.floor(Math.random() * 20) + 10;
+      if (pct >= 100) {
+        pct = 100;
+        clearInterval(interval);
+        setTimeout(() => {
+          loader.classList.add('loaded');
+        }, 150);
+      }
+      loaderPct.textContent = pct + '%';
+    }, 60);
+  }
 });

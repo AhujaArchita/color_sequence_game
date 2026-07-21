@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neon Sequence | 404 System Interrupt</title>
+  <!-- Fonts: Orbitron for titles, Rajdhani for technical headers, Inter for readable copy -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Orbitron:wght@600;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="dashboard-body-mode">
+  
+  <!-- Global loading overlay system -->
+  <div class="neural-loader" id="neuralLoader">
+    <div class="loader-terminal">
+      <div class="loader-scanner"></div>
+      <div class="loader-text">ESTABLISHING NEURAL LINK...</div>
+      <div class="loader-pct" id="loaderPct">0%</div>
+    </div>
+  </div>
+
+  <!-- Ambient background elements -->
+  <div class="grid-overlay"></div>
+  <div class="scanlines"></div>
+  <div class="neon-ambient-glows">
+    <div class="glow-cyan" style="background: rgba(255, 0, 85, 0.03);"></div>
+    <div class="glow-green" style="background: rgba(255, 0, 85, 0.02);"></div>
+  </div>
+
+  <div class="error-404-container">
+    <div class="error-404-card">
+      <div class="card-tech-cut top-right"></div>
+      
+      <div class="glitch-badge">ERROR_404</div>
+      <div class="glitch-subtitle">INTERRUPT_SIGNAL_LOST</div>
+      
+      <p class="error-404-desc">
+        The neural sector you are attempting to address does not exist or has been decompiled. Re-route packet transmissions back to base terminals.
+      </p>
+
+      <!-- Terminal logs console -->
+      <div class="debug-logs-terminal">
+        <div>[sys] addressing neural sector offset 0x4f2b...</div>
+        <div class="debug-err">[err] packet address unresolvable: sector_not_found</div>
+        <div>[sys] warning: connection timeout, aborting handshake...</div>
+        <div class="debug-warn">[warn] active sector routing lost. redirecting packets...</div>
+        <div>[sys] terminal ready for manual input override.</div>
+      </div>
+
+      <!-- Action button to return home -->
+      <a href="index.html" class="btn-primary" style="text-decoration: none;">
+        <span class="btn-border"></span>
+        <span class="btn-content">RE-ROUTE CORE LOGON</span>
+      </a>
+      
+    </div>
+  </div>
+
+  <!-- Injected loader control -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Sync theme overrides instantly on load
+      const currentTheme = localStorage.getItem('neon_settings_theme') || 'default';
+      if (currentTheme !== 'default') {
+        document.body.classList.add(`theme-${currentTheme}`);
+      }
+
+      const loader = document.getElementById('neuralLoader');
+      const loaderPct = document.getElementById('loaderPct');
+      let pct = 0;
+      
+      const interval = setInterval(() => {
+        pct += Math.floor(Math.random() * 20) + 10;
+        if (pct >= 100) {
+          pct = 100;
+          clearInterval(interval);
+          setTimeout(() => {
+            loader.classList.add('loaded');
+          }, 200);
+        }
+        loaderPct.textContent = pct + '%';
+      }, 80);
+    });
+  </script>
+</body>
+</html>

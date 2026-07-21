@@ -1,4 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
+  // Apply theme override instantly on load
+  const currentTheme = localStorage.getItem('neon_settings_theme') || 'default';
+  if (currentTheme !== 'default') {
+    document.body.classList.add(`theme-${currentTheme}`);
+  }
+
   // Elements
   const registerForm = document.getElementById('registerForm');
   
@@ -242,39 +248,72 @@ document.addEventListener('DOMContentLoaded', () => {
       if (stepIndex < steps.length) {
         createBtnText.textContent = steps[stepIndex];
       }
-    }, 600);
+    }, 500);
 
-    setTimeout(() => {
+    // Call registration API
+    fetch('backend/api/auth/register.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username: usernameInput.value.trim(),
+        email: emailInput.value.trim(),
+        password: passwordInput.value
+      })
+    })
+    .then(response => response.json().then(data => ({ status: response.status, data })))
+    .then(({ status, data }) => {
       clearInterval(interval);
-      
-      // Perform screen flash green animation
-      const flash = document.createElement('div');
-      flash.style.position = 'fixed';
-      flash.style.inset = '0';
-      flash.style.background = 'var(--neon-green)';
-      flash.style.opacity = '0.7';
-      flash.style.zIndex = '999';
-      flash.style.pointerEvents = 'none';
-      flash.style.transition = 'opacity 0.6s ease';
-      document.body.appendChild(flash);
-      
-      setTimeout(() => {
-        flash.style.opacity = '0';
-        setTimeout(() => flash.remove(), 600);
-      }, 100);
+      if (status === 201 && data.success) {
+        // Perform screen flash green animation
+        const flash = document.createElement('div');
+        flash.style.position = 'fixed';
+        flash.style.inset = '0';
+        flash.style.background = 'var(--neon-green)';
+        flash.style.opacity = '0.7';
+        flash.style.zIndex = '999';
+        flash.style.pointerEvents = 'none';
+        flash.style.transition = 'opacity 0.6s ease';
+        document.body.appendChild(flash);
+        
+        setTimeout(() => {
+          flash.style.opacity = '0';
+          setTimeout(() => flash.remove(), 600);
+        }, 100);
 
-      // Log success and redirect to login page (index.html)
-      createBtnText.textContent = 'PROFILE SYNCED!';
-      
-      // Store temporary message or simulate database injection success
-      localStorage.setItem('neon_registration_success', 'true');
-      localStorage.setItem('neon_pilot_email', emailInput.value.trim());
+        createBtnText.textContent = 'PROFILE SYNCED!';
+        
+        localStorage.setItem('neon_registration_success', 'true');
+        localStorage.setItem('neon_pilot_email', emailInput.value.trim());
 
-      setTimeout(() => {
-        window.location.href = 'index.html';
-      }, 1000);
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 1000);
+      } else {
+        // Show error from API
+        createAccountBtn.disabled = false;
+        createBtnText.textContent = 'ALLOCATE CALLSIGN';
+        
+        globalErrorMessage.textContent = data.message || 'SYS_ERR: REGISTRATION_FAILED';
+        globalErrorBox.classList.remove('hidden');
+        
+        // Shake animation
+        registerCard.style.animation = 'shake-error 0.4s ease';
+        setTimeout(() => { registerCard.style.animation = ''; }, 400);
+      }
+    })
+    .catch(error => {
+      clearInterval(interval);
+      createAccountBtn.disabled = false;
+      createBtnText.textContent = 'ALLOCATE CALLSIGN';
       
-    }, 2500);
+      globalErrorMessage.textContent = 'SYS_ERR: COMMUNICATIONS_OFFLINE';
+      globalErrorBox.classList.remove('hidden');
+      
+      registerCard.style.animation = 'shake-error 0.4s ease';
+      setTimeout(() => { registerCard.style.animation = ''; }, 400);
+    });
   });
 
   // 6. Interactive 3D tilt effect on the card
@@ -304,4 +343,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.addEventListener('mousemove', handleMouseMove);
   registerCard.addEventListener('mouseleave', handleMouseLeave);
+
+  // Global Neural Loader count-up animation
+  const loader = document.getElementById('neuralLoader');
+  const loaderPct = document.getElementById('loaderPct');
+  if (loader && loaderPct) {
+    let pct = 0;
+    const interval = setInterval(() => {
+      pct += Math.floor(Math.random() * 20) + 10;
+      if (pct >= 100) {
+        pct = 100;
+        clearInterval(interval);
+        setTimeout(() => {
+          loader.classList.add('loaded');
+        }, 150);
+      }
+      loaderPct.textContent = pct + '%';
+    }, 60);
+  }
 });
