@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neon Sequence | Core Simulation Arena</title>
+  <meta name="description" content="Core memory training protocol arena. Train your mind, repeat sequence patterns, and ascend global leaderboard rankings.">
+  <!-- Fonts: Orbitron for titles, Rajdhani for technical headers, Inter for readable copy -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Orbitron:wght@600;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="game-body-mode">
+  <!-- Ambient background elements -->
+  <div class="grid-overlay"></div>
+  <div class="scanlines"></div>
+  <div class="neon-ambient-glows">
+    <div class="glow-cyan"></div>
+    <div class="glow-green"></div>
+  </div>
+
+  <div class="app-container">
+    <main class="game-wrapper" id="gameWrapper">
+      <!-- Top HUD Header -->
+      <header class="game-header">
+        <div class="game-logo">
+          <span class="logo-accent-bracket">&lt;</span>
+          <span class="logo-title">NEON SEQUENCE</span>
+          <span class="logo-accent-bracket">&gt;</span>
+        </div>
+        
+        <!-- Navigation Tabs -->
+        <nav class="dash-nav">
+          <a href="game.html" class="nav-tab active">PLAY</a>
+          <a href="leaderboard.html" class="nav-tab">LEADERBOARD</a>
+          <a href="dashboard.html" class="nav-tab">DASHBOARD</a>
+          <a href="profile.html" class="nav-tab">PROFILE</a>
+        </nav>
+
+        <a href="index.html" class="btn-logout" id="logOutBtn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          LOG_OUT
+        </a>
+      </header>
+
+      <!-- Stats Bar Panel -->
+      <section class="stats-panel">
+        <div class="stat-hud-box" id="levelHudBox">
+          <div class="stat-hud-title">CURRENT_LEVEL</div>
+          <div class="stat-hud-value text-glow-cyan" id="levelVal">01</div>
+        </div>
+        <div class="stat-hud-box" id="scoreHudBox">
+          <div class="stat-hud-title">NEURAL_SCORE</div>
+          <div class="stat-hud-value text-glow-green" id="scoreVal">000</div>
+        </div>
+        <div class="stat-hud-box" id="bestHudBox">
+          <div class="stat-hud-title">BEST_PROTOCOL</div>
+          <div class="stat-hud-value text-glow-yellow" id="bestVal">000</div>
+        </div>
+      </section>
+
+      <!-- Mode Selector Panel -->
+      <div class="mode-selector-panel">
+        <span class="mode-label">ARENA_MODE:</span>
+        <div class="mode-toggle-group">
+          <button class="mode-btn active" id="modeNormalBtn">NORMAL_4P</button>
+          <button class="mode-btn" id="modeAdvancedBtn">ADVANCED_8P</button>
+        </div>
+      </div>
+
+      <!-- Main Game Arena -->
+      <section class="arena-panel">
+        <!-- Terminal telemetry overlay side decorators -->
+        <div class="arena-tech-decor left-decor">
+          <div class="decor-line"></div>
+          <div class="decor-text">LATENCY: 12ms</div>
+          <div class="decor-text">FREQ: 44.1kHz</div>
+        </div>
+        <div class="arena-tech-decor right-decor">
+          <div class="decor-line"></div>
+          <div class="decor-text">SYS_LINK: SECURE</div>
+          <div class="decor-text">AUDIO: SYNTH</div>
+        </div>
+
+        <!-- 4/8-Pad Game Board Grid -->
+        <div class="board-container" id="boardContainer">
+          <div class="board-glow-base"></div>
+          <div class="board-ring-outer"></div>
+          
+          <div class="game-board" id="gameBoard">
+            <!-- Green Pad (Top Left) -->
+            <button class="game-pad pad-green" id="pad-green" data-pad="green" aria-label="Green pad"></button>
+            
+            <!-- Cyan Pad (Top Center) -->
+            <button class="game-pad pad-cyan" id="pad-cyan" data-pad="cyan" aria-label="Cyan pad"></button>
+            
+            <!-- Blue Pad (Top Right) -->
+            <button class="game-pad pad-blue" id="pad-blue" data-pad="blue" aria-label="Blue pad"></button>
+            
+            <!-- Orange Pad (Middle Left) -->
+            <button class="game-pad pad-orange" id="pad-orange" data-pad="orange" aria-label="Orange pad"></button>
+            
+            <!-- Red Pad (Middle Right) -->
+            <button class="game-pad pad-red" id="pad-red" data-pad="red" aria-label="Red pad"></button>
+            
+            <!-- Yellow Pad (Bottom Left) -->
+            <button class="game-pad pad-yellow" id="pad-yellow" data-pad="yellow" aria-label="Yellow pad"></button>
+            
+            <!-- Pink Pad (Bottom Center) -->
+            <button class="game-pad pad-pink" id="pad-pink" data-pad="pink" aria-label="Pink pad"></button>
+            
+            <!-- Purple Pad (Bottom Right) -->
+            <button class="game-pad pad-purple" id="pad-purple" data-pad="purple" aria-label="Purple pad"></button>
+
+            <!-- Center Start Hub -->
+            <div class="center-hub" id="centerHub">
+              <button class="center-start-btn" id="centerStartBtn">
+                <div class="hub-ripple"></div>
+                <div class="btn-inner">
+                  <svg class="play-icon" id="playIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                  <span class="start-text" id="startBtnText">START</span>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Live Terminal Feedback Log -->
+      <section class="feedback-panel">
+        <div class="feedback-terminal">
+          <span class="terminal-prompt">&gt;&gt;&gt;</span>
+          <span class="terminal-log-text" id="terminalLog">SYS_READY: PRESS START TO INITIALIZE PROTOCOL...</span>
+        </div>
+      </section>
+
+      <!-- Bottom Game Controls -->
+      <section class="controls-panel">
+        <button class="btn-control" id="restartBtn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+          RESTART
+        </button>
+        
+        <button class="btn-control" id="muteBtn">
+          <svg id="muteIcon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+          AUDIO_ON
+        </button>
+        
+        <button class="btn-control" id="pauseBtn">
+          <svg id="pauseIcon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="4" x2="18" y2="20"/><line x1="6" y1="4" x2="6" y2="20"/></svg>
+          PAUSE_GAME
+        </button>
+      </section>
+    </main>
+
+    <!-- Pause Screen HUD Overlay -->
+    <div class="pause-overlay hidden" id="pauseOverlay">
+      <div class="pause-card">
+        <div class="pause-header">
+          <span class="pause-dots"><span class="dot red"></span><span class="dot yellow"></span></span>
+          <span class="pause-title">SYS_PAUSED</span>
+        </div>
+        <div class="pause-body">
+          <h2 class="pause-heading">NEURAL LINK SUSPENDED</h2>
+          <p class="pause-desc">The simulation pattern memory is currently paused. Resume when ready to continue sequence replication.</p>
+          <button class="btn-primary" id="resumeBtn">
+            <span class="btn-border"></span>
+            <span class="btn-content">RESUME SIMULATION</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>

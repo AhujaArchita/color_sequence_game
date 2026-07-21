@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neon Sequence | Global Rankings Portal</title>
+  <meta name="description" content="Global leaderboard rankings portal for Neon Sequence. Inspect top cognitive performances, streakers, and accuracy stats.">
+  <!-- Fonts: Orbitron for titles, Rajdhani for technical headers, Inter for readable copy -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Orbitron:wght@600;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="dashboard-body-mode">
+  <!-- Ambient background elements -->
+  <div class="grid-overlay"></div>
+  <div class="scanlines"></div>
+  <div class="neon-ambient-glows">
+    <div class="glow-cyan"></div>
+    <div class="glow-green"></div>
+  </div>
+
+  <div class="app-container">
+    <div class="leaderboard-wrapper">
+      
+      <!-- Top HUD Header -->
+      <header class="game-header">
+        <div class="game-logo">
+          <span class="logo-accent-bracket">&lt;</span>
+          <span class="logo-title">NEON SEQUENCE</span>
+          <span class="logo-accent-bracket">&gt;</span>
+        </div>
+        
+        <!-- Navigation Tabs -->
+        <nav class="dash-nav">
+          <a href="game.html" class="nav-tab">PLAY</a>
+          <a href="leaderboard.html" class="nav-tab active">LEADERBOARD</a>
+          <a href="dashboard.html" class="nav-tab">DASHBOARD</a>
+          <a href="profile.html" class="nav-tab">PROFILE</a>
+        </nav>
+
+        <a href="index.html" class="btn-logout" id="logOutBtn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          LOG_OUT
+        </a>
+      </header>
+
+      <!-- Main Leaderboard Layout -->
+      <div class="leaderboard-layout">
+        
+        <!-- TOP 3 PODIUM HERO SECTION -->
+        <section class="podium-section" id="podiumSection">
+          
+          <!-- Silver Position (Left, Rank 2) -->
+          <div class="podium-card silver-podium" id="podium-2">
+            <div class="podium-badge">02</div>
+            <div class="podium-avatar-frame">
+              <div class="avatar-ring"></div>
+              <svg class="podium-avatar-svg" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+            </div>
+            <h3 class="podium-username">V_GHOST</h3>
+            <div class="podium-medallion silver-text">SILVER_NODE</div>
+            <div class="podium-score-row">
+              <span class="ps-label">SCORE:</span>
+              <span class="ps-value text-glow-cyan">88,290</span>
+            </div>
+            <div class="podium-meta">
+              <span>LVL 42</span>
+              <span class="text-glow-yellow">97.8% ACC</span>
+            </div>
+          </div>
+
+          <!-- Gold Position (Center, Rank 1) -->
+          <div class="podium-card gold-podium" id="podium-1">
+            <div class="podium-glow-base"></div>
+            <div class="podium-badge">01</div>
+            <div class="podium-avatar-frame">
+              <div class="avatar-ring"></div>
+              <svg class="podium-avatar-svg" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <h3 class="podium-username">CYBER_DRAGON</h3>
+            <div class="podium-medallion gold-text">GOLD_NEURAL</div>
+            <div class="podium-score-row">
+              <span class="ps-label">SCORE:</span>
+              <span class="ps-value text-glow-green">104,500</span>
+            </div>
+            <div class="podium-meta">
+              <span>LVL 54</span>
+              <span class="text-glow-green">99.4% ACC</span>
+            </div>
+          </div>
+
+          <!-- Bronze Position (Right, Rank 3) -->
+          <div class="podium-card bronze-podium" id="podium-3">
+            <div class="podium-badge">03</div>
+            <div class="podium-avatar-frame">
+              <div class="avatar-ring"></div>
+              <svg class="podium-avatar-svg" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24M14.83 9.17l4.24-4.24M14.83 14.83l4.24 4.24M9.17 14.83l-4.24 4.24"/></svg>
+            </div>
+            <h3 class="podium-username">ECHO_PULSE</h3>
+            <div class="podium-medallion bronze-text">BRONZE_SYS</div>
+            <div class="podium-score-row">
+              <span class="ps-label">SCORE:</span>
+              <span class="ps-value text-glow-yellow">76,140</span>
+            </div>
+            <div class="podium-meta">
+              <span>LVL 38</span>
+              <span class="text-glow-cyan">96.9% ACC</span>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- FILTERS AND SEARCH PANEL -->
+        <section class="leaderboard-controls-panel">
+          <!-- Time Filters -->
+          <div class="filter-tab-bar">
+            <button class="filter-btn active" data-filter="daily">DAILY</button>
+            <button class="filter-btn" data-filter="weekly">WEEKLY</button>
+            <button class="filter-btn" data-filter="monthly">MONTHLY</button>
+            <button class="filter-btn" data-filter="all-time">ALL-TIME</button>
+          </div>
+          
+          <!-- Callsign Search -->
+          <div class="search-group">
+            <div class="input-container">
+              <span class="input-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              </span>
+              <input type="text" id="searchBar" class="custom-input" placeholder="SEARCH_CALLSIGN...">
+              <div class="input-neon-border"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- RANKINGS TABLE SECTION -->
+        <section class="rankings-table-card hud-card">
+          <div class="card-header">
+            <div class="terminal-title">GLOBAL_SIM_RANKINGS</div>
+            <div class="stats-count" id="activeFilterLabel">FILTER: DAILY</div>
+          </div>
+          
+          <div class="table-container">
+            <div class="rankings-table-header">
+              <div class="col-rank">RANK</div>
+              <div class="col-player">PLAYER_CALLSIGN</div>
+              <div class="col-accuracy">ACCURACY</div>
+              <div class="col-streak">STREAK</div>
+              <div class="col-level">LEVEL</div>
+              <div class="col-score">SCORE</div>
+            </div>
+            
+            <div class="rankings-table-body" id="rankingsTableBody">
+              <!-- Dynamically populated rows in JS -->
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="leaderboard.js"></script>
+</body>
+</html>
