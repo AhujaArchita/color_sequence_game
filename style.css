@@ -1616,6 +1616,7 @@ body {
   justify-content: center;
   align-items: center;
   z-index: 10;
+  pointer-events: auto !important;
 }
 
 .center-start-btn {
@@ -1632,6 +1633,7 @@ body {
   align-items: center;
   overflow: hidden;
   transition: all var(--transition-normal);
+  pointer-events: auto !important;
 }
 
 .btn-inner {
@@ -3557,19 +3559,18 @@ body {
 /* Reset Center Hub absolute centering to fit in 2/2 cell */
 .game-board.advanced .center-hub {
   grid-area: 2 / 2;
-  position: relative;
-  top: auto;
-  left: auto;
-  transform: none;
   width: 90px;
   height: 90px;
-  margin: auto;
   border-width: 2px;
+  pointer-events: auto !important;
+  z-index: 50 !important;
 }
 
 .game-board.advanced .center-start-btn {
   width: 100%;
   height: 100%;
+  pointer-events: auto !important;
+  z-index: 51 !important;
 }
 
 /* Advanced Pad custom shapes & colors */

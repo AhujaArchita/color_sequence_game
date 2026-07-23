@@ -1,4 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
+  // Global error handler to print JS crashes directly to the HUD terminal log
+  window.onerror = function (message, source, lineno, colno, error) {
+    const logEl = document.getElementById('terminalLog');
+    if (logEl) {
+      logEl.textContent = `CRITICAL_ERR: ${message} (Line: ${lineno})`;
+      logEl.style.color = '#ff0055'; // neon red/pink
+      logEl.style.textShadow = '0 0 5px #ff0055';
+    }
+    return false;
+  };
+
   // Apply theme override instantly on load
   const currentTheme = localStorage.getItem('neon_settings_theme') || 'default';
   if (currentTheme !== 'default') {
@@ -112,18 +123,31 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   updateBestScoreUI();
 
+  // Set pointer events on pads to prevent clicking during watch/idle state
+  function setPadsPointerEvents(state) {
+    Object.keys(pads).forEach(color => {
+      if (pads[color]) {
+        pads[color].style.pointerEvents = state;
+      }
+    });
+  }
+
   // Initialize Web Audio Context lazily
   function initAudio() {
     if (!audioCtx) {
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (AudioCtx) {
+        audioCtx = new AudioCtx();
+      }
     }
   }
 
   // Synthesize SFX pad chimes
   function playTone(freq, type = 'sine', duration = 0.3, volume = 0.25) {
     if (!sfxEnabled) return;
-    initAudio();
     try {
+      initAudio();
+      if (!audioCtx) return;
       const osc = audioCtx.createOscillator();
       const gainNode = audioCtx.createGain();
       osc.type = type;
@@ -160,8 +184,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // BGM Looping Neural Drone synthesis
   function startBgm() {
     if (!bgmEnabled) return;
-    initAudio();
     try {
+      initAudio();
+      if (!audioCtx) return;
       if (bgmNode1) return; // already playing
       
       bgmGain = audioCtx.createGain();
@@ -259,7 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function playSequence() {
     gameState = 'watch';
     logTerminal('WATCH CORE EMISSION SEQUENCE...', 'sys');
-    boardContainer.style.pointerEvents = 'none';
+    setPadsPointerEvents('none');
     
     // Hide timer bar during playback
     gameTimerBarContainer.classList.remove('visible');
@@ -294,7 +319,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function startUserInputPhase() {
     gameState = 'user';
     userSequence = [];
-    boardContainer.style.pointerEvents = 'all';
+    setPadsPointerEvents('all');
     logTerminal('YOUR TURN! DECRYPT SEQUENCE...', 'sys');
 
     if (rulesMode === 'timer') {
@@ -375,7 +400,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Complete level updates
   function triggerLevelComplete() {
     gameState = 'watch';
-    boardContainer.style.pointerEvents = 'none';
+    setPadsPointerEvents('none');
     
     playSuccessChime();
     logTerminal('LINK UPLINK STABLE. SECURING NEXUS...', 'sys');
@@ -425,7 +450,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Game over sequences
   function triggerGameError() {
     gameState = 'over';
-    boardContainer.style.pointerEvents = 'none';
+    setPadsPointerEvents('none');
     clearInterval(turnTimerInterval);
     
     playErrorBuzzer();
@@ -501,7 +526,7 @@ document.addEventListener('DOMContentLoaded', () => {
     playIcon.innerHTML = `<polygon points="5 3 19 12 5 21 5 3"/>`;
     
     gameState = 'idle';
-    boardContainer.style.pointerEvents = 'none';
+    setPadsPointerEvents('none');
     gameTimerBarContainer.classList.remove('visible');
     
     if (rulesMode === 'survival') {
@@ -526,8 +551,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // Arena Mode Selection
   function setGameMode(mode) {
     if (gameMode === mode) return;
-    initAudio();
-    playTone(440, 'triangle', 0.15, 0.1); 
+    try {
+      initAudio();
+      if (audioCtx) {
+        playTone(440, 'triangle', 0.15, 0.1); 
+      }
+    } catch (e) {}
     
     gameMode = mode;
     resetGame();
@@ -571,8 +600,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Start Trigger click
   centerStartBtn.addEventListener('click', () => {
-    initAudio();
-    startBgm();
+    try {
+      initAudio();
+      startBgm();
+    } catch (e) {
+      console.warn("Audio start failed:", e);
+    }
     
     if (gameState !== 'idle' && gameState !== 'over') return;
     
